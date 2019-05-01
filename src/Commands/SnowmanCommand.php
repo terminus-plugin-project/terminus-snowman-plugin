@@ -1,6 +1,6 @@
 <?php
 
-namespace TerminusPluginProject\Genie\Commands;
+namespace TerminusPluginProject\Snowman\Commands;
 
 use Pantheon\Terminus\Commands\Site\SiteCommand;
 use Pantheon\Terminus\Site\SiteAwareInterface;
