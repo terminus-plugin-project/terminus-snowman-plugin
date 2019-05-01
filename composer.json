@@ -1,0 +1,34 @@
+{
+  "name": "terminus-plugin-project/terminus-snowman-plugin",
+  "description": "Snowman - A Terminus plugin for unfreezing sites.",
+  "homepage": "https://github.com/terminus-plugin-project/terminus-snowman-plugin",
+  "authors": [
+    {
+      "name": "Brian Thompson",
+      "email": "bthompson@mindgrub.com",
+      "homepage": "https://github.com/rvtraveller",
+      "role": "Developer"
+    }
+  ],
+  "type": "terminus-plugin",
+  "keywords": [
+    "pantheon",
+    "terminus",
+    "plugin"
+  ],
+  "support": {
+    "issues": "https://github.com/terminus-plugin-project/terminus-snowman-plugin/issues"
+  },
+  "license": "MIT",
+  "require": {
+    "php": ">=7.0"
+  },
+  "autoload": {
+    "psr-4": { "TerminusPluginProject\\Genie\\": "src" }
+  },
+  "extra": {
+    "terminus": {
+      "compatible-version": "2.*"
+    }
+  }
+}
