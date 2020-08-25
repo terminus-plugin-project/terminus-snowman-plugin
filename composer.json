@@ -24,7 +24,7 @@
     "php": ">=7.0"
   },
   "autoload": {
-    "psr-4": { "TerminusPluginProject\\Genie\\": "src" }
+    "psr-4": { "TerminusPluginProject\\Snowman\\": "src" }
   },
   "extra": {
     "terminus": {
