@@ -4,12 +4,6 @@
 
 Terminus plugin to defrost a [frozen Pantheon website](https://pantheon.io/docs/platform-considerations#inactive-site-freezing).
 
-Do you want to build a snowman? If so, whether you do or don't, having a frozen Pantheon site
-is probably not how you want to build that snowman. This plugin allows you to unfreeze those
-Pantheon sites that have been frozen.
-
-Based on the Snowman plugin at https://github.com/terminus-plugin-project/terminus-snowman-plugin.
-
 ## Examples (with aliases)
 ### Site name
 ```
@@ -30,8 +24,11 @@ $ terminus site:unfreeze de305d54-75b4-431b-adb2-eb6b9e546014
 For help installing, see [Manage Plugins](https://pantheon.io/docs/terminus/plugins/)
 ```
 mkdir -p ~/.terminus/plugins
-composer create-project -d ~/.terminus/plugins morganestes/terminus-snowman-plugin:~1
+composer create-project -d ~/.terminus/plugins morganestes/terminus-defrost-plugin:~1
 ```
 
 ## Help
 Run `terminus list site` for a complete list of available commands. Use `terminus help <command>` to get help on one command.
+
+## Credits
+Based on the Snowman plugin at https://github.com/terminus-plugin-project/terminus-snowman-plugin.
