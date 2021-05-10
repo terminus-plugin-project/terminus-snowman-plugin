@@ -1,12 +1,17 @@
 {
-  "name": "terminus-plugin-project/terminus-snowman-plugin",
-  "description": "Snowman - A Terminus plugin for unfreezing sites.",
-  "homepage": "https://github.com/terminus-plugin-project/terminus-snowman-plugin",
+  "name": "morganestes/terminus-snowman-plugin",
+  "description": "A Terminus plugin for unfreezing sites.",
+  "homepage": "https://github.com/morganestes/terminus-snowman-plugin",
   "authors": [
     {
       "name": "Brian Thompson",
       "email": "bthompson@mindgrub.com",
       "homepage": "https://github.com/rvtraveller",
+      "role": "Developer"
+    },
+    {
+      "name": "Morgan Estes",
+      "email": "mestes@reachlocal.com",
       "role": "Developer"
     }
   ],
@@ -17,7 +22,7 @@
     "plugin"
   ],
   "support": {
-    "issues": "https://github.com/terminus-plugin-project/terminus-snowman-plugin/issues"
+    "issues": "https://github.com/morganestes/terminus-snowman-plugin/issues"
   },
   "license": "MIT",
   "require": {
@@ -27,7 +32,7 @@
     "pantheon-systems/terminus": "^2"
   },
   "autoload": {
-    "psr-4": { "TerminusPluginProject\\Snowman\\": "src" }
+    "psr-4": { "MorganEstes\\Terminus\\": "src" }
   },
   "extra": {
     "terminus": {
