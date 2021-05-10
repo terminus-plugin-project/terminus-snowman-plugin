@@ -13,7 +13,9 @@ Based on the original Snoman plugin at https://github.com/terminus-plugin-projec
 ## Examples
 ### Unfreeze a site
 ```
-$ terminus site:unfreeze <site>
+$ terminus site:unfreeze https://dev-my-cool-site.pantheonsite.io/
+$ terminus site:thaw my-cool-site
+$ terminus site:defrost de305d54-75b4-431b-adb2-eb6b9e546014
 ```
 
 ### Also unfreeze a site
