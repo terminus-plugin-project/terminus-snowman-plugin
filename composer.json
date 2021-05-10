@@ -1,17 +1,18 @@
 {
-  "name": "morganestes/terminus-snowman-plugin",
-  "description": "A Terminus plugin for unfreezing sites.",
-  "homepage": "https://github.com/morganestes/terminus-snowman-plugin",
+  "name": "morganestes/terminus-defrost-plugin",
+  "description": "A Terminus plugin for defrosting frozen Pantheon sites.",
+  "homepage": "https://github.com/morganestes/terminus-defrost-plugin",
   "authors": [
+    {
+      "name": "Morgan Estes",
+      "email": "morgan@morganestes.com",
+      "homepage": "https://morganestes.com",
+      "role": "Developer"
+    },
     {
       "name": "Brian Thompson",
       "email": "bthompson@mindgrub.com",
       "homepage": "https://github.com/rvtraveller",
-      "role": "Developer"
-    },
-    {
-      "name": "Morgan Estes",
-      "email": "mestes@reachlocal.com",
       "role": "Developer"
     }
   ],
@@ -22,7 +23,7 @@
     "plugin"
   ],
   "support": {
-    "issues": "https://github.com/morganestes/terminus-snowman-plugin/issues"
+    "issues": "https://github.com/morganestes/terminus-defrost-plugin/issues"
   },
   "license": "MIT",
   "require": {
