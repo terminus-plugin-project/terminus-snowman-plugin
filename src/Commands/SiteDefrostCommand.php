@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Creates a Terminus command to defrost sites in Pantheon.
  */
