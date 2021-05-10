@@ -21,14 +21,17 @@
   },
   "license": "MIT",
   "require": {
-    "php": ">=7.0"
+    "php": ">=7.3"
+  },
+  "require-dev": {
+    "pantheon-systems/terminus": "^2"
   },
   "autoload": {
     "psr-4": { "TerminusPluginProject\\Snowman\\": "src" }
   },
   "extra": {
     "terminus": {
-      "compatible-version": "2.*"
+      "compatible-version": "^2"
     }
   }
 }
