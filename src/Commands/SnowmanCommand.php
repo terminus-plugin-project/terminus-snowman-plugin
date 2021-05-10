@@ -6,11 +6,11 @@
 
 namespace TerminusPluginProject\Snowman\Commands;
 
-use Exception;
 use Pantheon\Terminus\Commands\Site\SiteCommand;
 use Pantheon\Terminus\Site\SiteAwareInterface;
 use Pantheon\Terminus\Site\SiteAwareTrait;
 use Pantheon\Terminus\Models\Site;
+use Pantheon\Terminus\Exceptions\TerminusException;
 
 class SnowmanCommand extends SiteCommand implements SiteAwareInterface
 {
@@ -41,12 +41,12 @@ class SnowmanCommand extends SiteCommand implements SiteAwareInterface
    * 
    * @param string $site Site (name, URL, or ID) to unfreeze.
    */
-  public function snowman(string $site): self
+  public function defrost(string $site): self
   {
     try {
       $this->setSiteInstance($site);
-    } catch (\Throwable $th) {
-      $this->io()->error($th->getMessage());
+    } catch (TerminusException $ex) {
+      $this->io()->error($ex->getMessage());
     }
 
     return $this->runner();
@@ -95,10 +95,14 @@ class SnowmanCommand extends SiteCommand implements SiteAwareInterface
         $this->siteInstance = $this->getSite($this->getSiteName());
       }
 
+      if (!$this->siteInstance instanceof Site) {
+        throw new TerminusException(sprintf('Cannot find site %s', $siteName));
+      }
+
       // Re-set the site name with the one in Pantheon's data.
       $this->setSiteName($this->siteInstance->get('name'));
-    } catch (\Throwable $th) {
-      $this->io()->error($th->getMessage());
+    } catch (TerminusException $ex) {
+      $this->io()->error($ex->getMessage());
     }
 
 
@@ -114,7 +118,7 @@ class SnowmanCommand extends SiteCommand implements SiteAwareInterface
   protected function getSiteInstance(): Site
   {
     if (!$this->siteInstance instanceof Site) {
-      throw new \Exception(sprintf('Could not find the site %s', $this->siteName), 'invalid_site');
+      throw new TerminusException(sprintf('Could not find the site %s', $this->siteName));
     }
 
     return $this->siteInstance;
@@ -154,10 +158,10 @@ class SnowmanCommand extends SiteCommand implements SiteAwareInterface
       $siteName = preg_replace($regexes, '', $siteName);
 
       if (empty($siteName)) {
-        throw new \Exception(sprintf('%s is an invalid name.', $siteName), 'invalid_site');
+        throw new TerminusException(sprintf('%s is an invalid name.', $siteName));
       }
-    } catch (\Throwable $th) {
-      $this->io()->error($th->getMessage());
+    } catch (TerminusException $ex) {
+      $this->io()->error($ex->getMessage());
     }
 
     return $siteName;
@@ -187,8 +191,8 @@ class SnowmanCommand extends SiteCommand implements SiteAwareInterface
   {
     try {
       $this->getSiteInstance()->getWorkflows()->create('unfreeze_site');
-    } catch (\Throwable $th) {
-      $this->io()->error($th->getMessage());
+    } catch (TerminusException $ex) {
+      $this->io()->error($ex->getMessage());
     }
 
     return $this;
@@ -234,8 +238,8 @@ class SnowmanCommand extends SiteCommand implements SiteAwareInterface
           ->thaw()
           ->showFrozenMessage();
       }
-    } catch (\Throwable $th) {
-      $this->io()->error($th->getMessage());
+    } catch (TerminusException $ex) {
+      $this->io()->error($ex->getMessage());
     }
 
     return $this;
