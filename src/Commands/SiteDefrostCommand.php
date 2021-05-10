@@ -4,7 +4,7 @@
  * Creates a Terminus command to defrost sites in Pantheon.
  */
 
-namespace TerminusPluginProject\Snowman\Commands;
+namespace MorganEstes\Terminus\Commands;
 
 use Pantheon\Terminus\Commands\Site\SiteCommand;
 use Pantheon\Terminus\Site\SiteAwareInterface;
@@ -12,7 +12,7 @@ use Pantheon\Terminus\Site\SiteAwareTrait;
 use Pantheon\Terminus\Models\Site;
 use Pantheon\Terminus\Exceptions\TerminusException;
 
-class SnowmanCommand extends SiteCommand implements SiteAwareInterface
+class SiteDefrostCommand extends SiteCommand implements SiteAwareInterface
 {
   use SiteAwareTrait;
 
@@ -35,11 +35,11 @@ class SnowmanCommand extends SiteCommand implements SiteAwareInterface
    *
    * @authorize
    *
-   * @command site:unfreeze
-   * @aliases site:thaw, site:defrost, snowman
-   * @usage terminus site:unfreeze <site>
+   * @command site:defrost
+   * @aliases site:thaw, site:unfreeze
+   * @usage terminus site:defrost <site>
    * 
-   * @param string $site Site (name, URL, or ID) to unfreeze.
+   * @param string $site Site to unfreeze.
    */
   public function defrost(string $site): self
   {
@@ -77,6 +77,10 @@ class SnowmanCommand extends SiteCommand implements SiteAwareInterface
       return (string) $this->siteName;
     }
 
+    if ( $this->getSiteInstance() instanceof Site ){
+      return $this->getSiteInstance()->get('name');
+    }
+
     return '';
   }
 
@@ -100,11 +104,10 @@ class SnowmanCommand extends SiteCommand implements SiteAwareInterface
       }
 
       // Re-set the site name with the one in Pantheon's data.
-      $this->setSiteName($this->siteInstance->get('name'));
+      // $this->setSiteName($this->siteInstance->get('name'));
     } catch (TerminusException $ex) {
       $this->io()->error($ex->getMessage());
     }
-
 
     return $this;
   }
@@ -136,13 +139,13 @@ class SnowmanCommand extends SiteCommand implements SiteAwareInterface
     $siteName = trim($maybeSiteName);
 
     // No need to continue if we already have a site slug that matches what's trying to be set.
-    if (!empty($this->siteName) && $this->getSiteName() === $maybeSiteName) {
-      return $maybeSiteName;
+    if (!empty($this->getSiteName()) && $this->getSiteName() === $siteName) {
+      return $siteName;
     }
 
-    // Assume UUID format is a Pantheon Site ID and skip further processing.
+    // Assume UUID format is a Pantheon Site ID and try to get the name directly.
     if ($this->isUUID($siteName)) {
-      return $maybeSiteName;
+      return $this->getSite($siteName)->get('name');
     }
 
     try {
@@ -158,7 +161,7 @@ class SnowmanCommand extends SiteCommand implements SiteAwareInterface
       $siteName = preg_replace($regexes, '', $siteName);
 
       if (empty($siteName)) {
-        throw new TerminusException(sprintf('%s is an invalid name.', $siteName));
+        throw new TerminusException(sprintf('Could not validate site name %s.', $siteName));
       }
     } catch (TerminusException $ex) {
       $this->io()->error($ex->getMessage());
@@ -170,15 +173,13 @@ class SnowmanCommand extends SiteCommand implements SiteAwareInterface
   /**
    * Checks to see if this is a valid UUID format. It does not check for Site ID validity.
    * 
-   * @param string $string The string to check.
+   * @param string $maybeUUID The string to check.
    * @return bool Whether this matches the UUID format.
    */
-  public function isUUID(string $string): bool
+  public function isUUID(string $maybeUUID): bool
   {
-    $maybeUUID = trim($string);
     // This regex can probably be shortened, but this one only takes 16 steps.
-    $uuid_regex = '/\b[\da-f]{8}-(?:[\da-f]{4}-){3}[\da-f]{12}\b/i';
-    return (1 === preg_match($uuid_regex, $maybeUUID));
+    return (1 === preg_match('/[\da-f]{8}-(?:[\da-f]{4}-){3}[\da-f]{12}/i', trim($maybeUUID)));
   }
 
   /**
@@ -218,7 +219,7 @@ class SnowmanCommand extends SiteCommand implements SiteAwareInterface
    */
   private function runner()
   {
-    $link_msg = "Visit https://dev-{$this->getSiteName()}.pantheonsite.io/ to view the site.";
+    $link_msg = sprintf('Visit https://dev-%s.pantheonsite.io/ to view the site.', $this->getSiteName());
 
     try {
       if (!$this->getSiteInstance()->isFrozen()) {
@@ -234,6 +235,7 @@ class SnowmanCommand extends SiteCommand implements SiteAwareInterface
           $link_msg,
         ];
         $this->io()->block($messages, 'Note', 'comment');
+
         $this
           ->thaw()
           ->showFrozenMessage();
