@@ -24,7 +24,7 @@ $ terminus site:unfreeze de305d54-75b4-431b-adb2-eb6b9e546014
 For help installing, see [Manage Plugins](https://pantheon.io/docs/terminus/plugins/)
 ```
 mkdir -p ~/.terminus/plugins
-composer create-project -d ~/.terminus/plugins morganestes/terminus-defrost-plugin:~1
+composer create-project -d ~/.terminus/plugins morganestes/terminus-defrost-plugin:~2 --no-dev
 ```
 
 ## Help
