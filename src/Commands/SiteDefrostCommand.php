@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Creates a Terminus command to defrost sites in Pantheon.
  */
@@ -136,9 +137,17 @@ class SiteDefrostCommand extends SiteCommand implements SiteAwareInterface
       return $siteName;
     }
 
+    // If given a Pantheon dashboard link, try to extract the UUID.
+    // If there's not a UUID in there, it'll just revert back to the passed $maybeSiteName.
+    $siteName = $this->maybeGetUUIDFromURL($siteName);
+
     // Assume UUID format is a Pantheon Site ID and try to get the name directly.
     if ($this->isUUID($siteName)) {
-      return $this->getSite($siteName)->get('name');
+      $site = $this->getSite($siteName);
+      if ($site instanceof Site) {
+        return $site->get('name');
+      }
+      return $siteName; // Revert to the passed UUID if we can't get the name. That probably means it's invalid, though.
     }
 
     try {
@@ -172,7 +181,31 @@ class SiteDefrostCommand extends SiteCommand implements SiteAwareInterface
   public function isUUID(string $maybeUUID): bool
   {
     // This regex can probably be shortened, but this one only takes 16 steps.
-    return (1 === preg_match('/[\da-f]{8}-(?:[\da-f]{4}-){3}[\da-f]{12}/i', trim($maybeUUID)));
+    $regexp = '/[\da-f]{8}-(?:[\da-f]{4}-){3}[\da-f]{12}/i';
+
+    return (1 === preg_match($regexp, trim($maybeUUID)));
+  }
+
+  /**
+   * Tries to extract a UUID from a URL.
+   * 
+   * This is most useful when given a link to a dashboard page
+   * @param string $url 
+   * @return string 
+   */
+  public function maybeGetUUIDFromURL(string $url): string
+  {
+    $url = trim($url);
+    // 18 steps when given a full dashboard URL.
+    $regexp = '/[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}/i';
+
+    preg_match($regexp, $url, $matches);
+
+    if (!empty($matches) && $this->isUUID($matches[0])) {
+      return $matches[0];
+    }
+
+    return $url;
   }
 
   /**
